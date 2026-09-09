@@ -1,6 +1,6 @@
 {
   "name": "@xstd/listener-resource",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "description": "A resource for event listener/emitter",
   "keywords": [],
@@ -27,23 +27,28 @@
     "=== FB: TEST ===": "",
     "fb:test": "vitest run",
     "fb:test:coverage": "vitest run --coverage",
-    "fb:bench": "vitest bench",
-    "=== FB: DOC ===": "",
-    "fb:typedoc": "typedoc --options typedoc.json --tsconfig tsconfig.json"
+    "fb:bench": "vitest bench"
   },
   "devDependencies": {
     "@types/node": "^26.4.1",
     "@vitest/coverage-istanbul": "^5.0.0",
-    "fabrique": "2.0.14",
+    "fabrique": "2.0.16",
     "prettier": "^3.9.6",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typedoc": "^0.28.20",
     "typescript": "^7.0.2",
+    "vite": "^8.2.2",
     "vitest": "^5.0.0"
   },
   "access": "public",
+  "dependencies": {
+    "@xstd/abortable": "^1.2.3",
+    "@xstd/none": "^1.0.0",
+    "@xstd/queueing-policy": "^1.0.1",
+    "@xstd/resource": "^0.4.0"
+  },
   "fabrique": {
-    "version": "2.0.14",
+    "version": "2.0.16",
     "type": "lib"
   }
 }
