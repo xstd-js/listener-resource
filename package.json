@@ -1,0 +1,49 @@
+{
+  "name": "@xstd/listener-resource",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "A resource for event listener/emitter",
+  "keywords": [],
+  "author": "Valentin Richard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xstd-js/listener-resource.git"
+  },
+  "packageManager": "yarn@4.18.0",
+  "main": "./index.js",
+  "scripts": {
+    "=== FB: BUILD ===": "",
+    "fb:build": "fabrique build",
+    "=== FB: CODE QUALITY ===": "",
+    "fb:format": "yarn fb:format:fix",
+    "fb:format:check": "prettier --check --ignore-unknown --config .prettierrc \"./**/*.{js,jsx,ts,tsx,html,css,scss,json,md}\"",
+    "fb:format:fix": "prettier --write --ignore-unknown --config .prettierrc \"./**/*.{js,jsx,ts,tsx,html,css,scss,json,md}\"",
+    "fb:check": "yarn fb:check:types && yarn fb:format:check",
+    "fb:check:types": "tsc -p tsconfig.json --noEmit",
+    "=== FB: RELEASE ===": "",
+    "fb:manual:release": "fabrique release",
+    "fb:ci:release": "fabrique ci release",
+    "=== FB: TEST ===": "",
+    "fb:test": "vitest run",
+    "fb:test:coverage": "vitest run --coverage",
+    "fb:bench": "vitest bench",
+    "=== FB: DOC ===": "",
+    "fb:typedoc": "typedoc --options typedoc.json --tsconfig tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "@vitest/coverage-istanbul": "^5.0.0",
+    "fabrique": "2.0.14",
+    "prettier": "^3.9.6",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "typedoc": "^0.28.20",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  },
+  "access": "public",
+  "fabrique": {
+    "version": "2.0.14",
+    "type": "lib"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    /* Build */
+    "target": "ESNext",
+    "module": "NodeNext",
+    "lib": ["ESNext", "DOM"],
+    "types": ["node"],
+    "typeRoots": ["node_modules/@types"],
+    "useDefineForClassFields": true,
+    "skipLibCheck": true,
+    "declaration": false,
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+    "importHelpers": false,
+    "noEmitHelpers": false,
+    "pretty": true,
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "stripInternal": false,
+    "preserveConstEnums": true,
+    "alwaysStrict": true,
+
+    /* Mode */
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
+    "isolatedModules": false,
+    "moduleDetection": "force",
+    "noEmit": false,
+
+    /* Import */
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noLib": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "erasableSyntaxOnly": true
+  },
+  "include": ["src/**/*.ts"]
+}
