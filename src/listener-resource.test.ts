@@ -200,7 +200,7 @@ describe('ListenerResource', () => {
 
     const policy = new RecordingPolicy();
     const iterator: AsyncIterator<number> = resource
-      .iterator({ queueingPolicy: policy })
+      .values({ queueingPolicy: policy })
       [Symbol.asyncIterator]();
 
     const first: Promise<IteratorResult<number>> = iterator.next();
@@ -225,13 +225,13 @@ describe('ListenerResource', () => {
     await resource.close();
   });
 
-  it('iterator() resolves a pending next() when a value is emitted', async () => {
+  it('values() resolves a pending next() when a value is emitted', async () => {
     let emit!: EmitValue<number>;
     const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
       emit = emitFunction;
     });
 
-    const iterator: AsyncIterator<number> = resource.iterator()[Symbol.asyncIterator]();
+    const iterator: AsyncIterator<number> = resource.values()[Symbol.asyncIterator]();
 
     const pending: Promise<IteratorResult<number>> = iterator.next();
     emit(13);
@@ -242,13 +242,13 @@ describe('ListenerResource', () => {
     await resource.close();
   });
 
-  it('iterator() tolerates values dropped while not pulling (edge policy)', async () => {
+  it('values() tolerates values dropped while not pulling (edge policy)', async () => {
     let emit!: EmitValue<number>;
     const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
       emit = emitFunction;
     });
 
-    const iterator: AsyncIterator<number> = resource.iterator()[Symbol.asyncIterator]();
+    const iterator: AsyncIterator<number> = resource.values()[Symbol.asyncIterator]();
 
     const first: Promise<IteratorResult<number>> = iterator.next();
     emit(1);
@@ -362,7 +362,7 @@ describe('ListenerResource', () => {
     await resource.close();
   });
 
-  it('iterator() accepts an explicit signal', async () => {
+  it('values() accepts an explicit signal', async () => {
     let emit!: EmitValue<number>;
     const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
       emit = emitFunction;
@@ -370,7 +370,7 @@ describe('ListenerResource', () => {
 
     const controller: AbortController = new AbortController();
     const iterator: AsyncIterator<number> = resource
-      .iterator({ signal: controller.signal })
+      .values({ signal: controller.signal })
       [Symbol.asyncIterator]();
 
     const pending: Promise<IteratorResult<number>> = iterator.next();

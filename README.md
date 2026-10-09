@@ -73,7 +73,7 @@ The returned promise is tied to this resource's lifecycle: it rejects as soon as
 const value: number = await resource.next();
 ```
 
-### 🔁 `iterator` & `for await...of`
+### 🔁 `values` & `for await...of`
 
 Iterates over the emitted values. `ListenerResource` also implements `Symbol.asyncIterator`, enabling `for await...of` directly over the resource.
 

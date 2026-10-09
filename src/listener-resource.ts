@@ -1,6 +1,10 @@
 import { type Abortable, abortify } from '@xstd/abortable';
 import { type None, NONE } from '@xstd/none';
-import { EdgeQueuingPolicy, type HavingOptionalQueueingPolicy, Queue } from '@xstd/queueing-policy';
+import {
+  EdgeQueuingPolicy,
+  type HavingOptionalQueueingPolicy,
+  type Queue,
+} from '@xstd/queueing-policy';
 import { CloseStack, type OnCloseResource, Resource } from '@xstd/resource';
 
 /**
@@ -32,7 +36,7 @@ export interface InitListenerResource<GValue> {
  * `signal` is an optional `AbortSignal` to stop the iteration.
  * `queueingPolicy` controls the buffering of the values emitted while the consumer is busy processing the previous one, and defaults to `EdgeQueuingPolicy`.
  */
-export interface ListenerResourceTOIteratorOptions
+export interface ListenerResourceToIteratorOptions
   extends Abortable, HavingOptionalQueueingPolicy {}
 
 /**
@@ -185,16 +189,16 @@ export class ListenerResource<GValue> extends Resource {
    *
    * The internal listener is unregistered when the iteration ends early (e.g. `break`), when the provided `signal` aborts, or when the resource closes.
    *
-   * @param {ListenerResourceTOIteratorOptions} [options] - The iteration options.
+   * @param {ListenerResourceToIteratorOptions} [options] - The iteration options.
    * @param {AbortSignal} options.signal - An optional `AbortSignal` to stop the iteration.
    * @param {QueueingPolicy} options.queueingPolicy - The queueing policy applied to the emitted values (defaults to `EdgeQueuingPolicy`).
    * @returns {AsyncGenerator<GValue>} An async generator yielding the emitted values.
    * @throws {unknown} If the provided `signal` or the resource's close signal is already aborted, rejects the signal's reason.
    */
-  async *iterator({
+  async *values({
     signal,
     queueingPolicy = EdgeQueuingPolicy,
-  }: ListenerResourceTOIteratorOptions = {}): AsyncGenerator<GValue> {
+  }: ListenerResourceToIteratorOptions = {}): AsyncGenerator<GValue> {
     const sharedSignal: AbortSignal =
       signal === undefined ? this.closeSignal : AbortSignal.any([signal, this.closeSignal]);
 
@@ -238,7 +242,7 @@ export class ListenerResource<GValue> extends Resource {
    * @returns {AsyncGenerator<GValue>} A new async generator, equivalent to `this.iterator()`.
    */
   [Symbol.asyncIterator](): AsyncGenerator<GValue> {
-    return this.iterator();
+    return this.values();
   }
 }
 
