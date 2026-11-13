@@ -1062,7 +1062,7 @@ __metadata:
     "@vitest/coverage-istanbul": "npm:^5.1.0"
     "@xstd/abortable": "npm:^1.2.3"
     "@xstd/none": "npm:^1.0.0"
-    "@xstd/queueing-policy": "npm:^1.1.0"
+    "@xstd/queueing-policy": "npm:^1.1.1"
     "@xstd/resource": "npm:^1.0.0"
     fabrique: "npm:2.0.36"
     prettier: "npm:^3.10.1"
@@ -1081,12 +1081,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xstd/queueing-policy@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@xstd/queueing-policy@npm:1.1.0"
+"@xstd/queueing-policy@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@xstd/queueing-policy@npm:1.1.1"
   dependencies:
     "@xstd/none": "npm:^1.0.0"
-  checksum: 10c0/234a1e7ac85f497de7848cbee87c128abfb6bb60145bdbb172ae424d1a2d1f4e972d6c382345fb04bf1f45d3894257592be14656757b440b9190981f21cf7176
+  checksum: 10c0/b1d54890eaf96ffe6a3fda9b0958525a7ffdecd941623b96a9d9d76f161873881fad0c28bcb739725165136281f0d294638380b0100902c26a0f32005dd67563
   languageName: node
   linkType: hard
 
