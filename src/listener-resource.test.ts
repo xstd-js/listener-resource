@@ -83,6 +83,30 @@ describe('ListenerResource', () => {
     }).toThrowError('Resource closed');
   });
 
+  it('stops the ongoing dispatch when the resource is closed mid-dispatch', async () => {
+    let emit!: EmitValue<number>;
+    const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
+      emit = emitFunction;
+    });
+
+    const calls: string[] = [];
+
+    resource.listen((_: number): void => {
+      calls.push('a');
+      void resource.close('stopped'); // mid-dispatch close
+    });
+    resource.listen((_: number): void => {
+      calls.push('b');
+    });
+
+    expect((): void => {
+      emit(1);
+    }).not.toThrow(); // the close is a deliberate lifecycle action, not an error for the emitter
+
+    expect(calls).toEqual(['a']); // listener 'b' is skipped: the listeners were cleared synchronously
+    expect(resource.closeSignal.reason).toBe('stopped');
+  });
+
   it('listen() is a no-op when the provided signal is already aborted', () => {
     const resource = new ListenerResource<number>((): void => {});
 
@@ -94,7 +118,7 @@ describe('ListenerResource', () => {
     }).not.toThrow();
   });
 
-  it('stops dispatching and rethrows when a listener throws', async () => {
+  it('closes the resource with the thrown error when a listener throws', async () => {
     let emit!: EmitValue<number>;
     const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
       emit = emitFunction;
@@ -111,17 +135,52 @@ describe('ListenerResource', () => {
       calls.push('b');
     });
 
-    let thrown: unknown;
-    try {
+    expect((): void => {
       emit(1);
-    } catch (error: unknown) {
-      thrown = error;
-    }
+    }).not.toThrow(); // the error does not escape to the emitter
 
-    expect(thrown).toBe(sentinel);
-    expect(calls).toEqual(['a']);
+    expect(calls).toEqual(['a']); // the remaining listeners are not invoked
+    expect(resource.closeSignal.aborted).toBe(true);
+    expect(resource.closeSignal.reason).toBe(sentinel);
+  });
 
-    await resource.close();
+  it('rejects a pending next() with the error thrown by a listener', async () => {
+    let emit!: EmitValue<number>;
+    const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
+      emit = emitFunction;
+    });
+
+    const sentinel: Error = new Error('listener failed');
+
+    resource.listen((_: number): void => {
+      throw sentinel;
+    });
+
+    const promise: Promise<number> = resource.next();
+
+    emit(1);
+
+    await expect(promise).rejects.toBe(sentinel);
+  });
+
+  it('rejects a pending values() iteration with the error thrown by a listener', async () => {
+    let emit!: EmitValue<number>;
+    const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
+      emit = emitFunction;
+    });
+
+    const sentinel: Error = new Error('listener failed');
+
+    resource.listen((_: number): void => {
+      throw sentinel;
+    });
+
+    const iterator: AsyncIterator<number> = resource.values()[Symbol.asyncIterator]();
+    const pending: Promise<IteratorResult<number>> = iterator.next();
+
+    emit(1);
+
+    await expect(pending).rejects.toBe(sentinel);
   });
 
   it('stops delivering to a listener after its signal aborts, without disturbing other listeners', async () => {
