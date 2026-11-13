@@ -1,9 +1,23 @@
 {
   "name": "@xstd/listener-resource",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "type": "module",
-  "description": "A resource for event listener/emitter",
-  "keywords": [],
+  "description": "A broadcast hub resource for event listeners",
+  "keywords": [
+    "event",
+    "event-emitter",
+    "event-listener",
+    "listener",
+    "emitter",
+    "broadcast",
+    "resource",
+    "abortable",
+    "signal",
+    "async-iterator",
+    "lifecycle",
+    "close",
+    "dispose"
+  ],
   "author": "Valentin Richard",
   "license": "MIT",
   "repository": {
@@ -35,7 +49,7 @@
     "@types/node": "^26.6.6",
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitest/coverage-istanbul": "^5.1.0",
-    "fabrique": "2.0.35",
+    "fabrique": "2.0.36",
     "prettier": "^3.10.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typedoc": "^0.28.20",
@@ -47,11 +61,11 @@
   "dependencies": {
     "@xstd/abortable": "^1.2.3",
     "@xstd/none": "^1.0.0",
-    "@xstd/queueing-policy": "^1.0.1",
-    "@xstd/resource": "^0.4.0"
+    "@xstd/queueing-policy": "^1.1.1",
+    "@xstd/resource": "^1.0.0"
   },
   "fabrique": {
-    "version": "2.0.35",
+    "version": "2.0.36",
     "type": "lib"
   }
 }
