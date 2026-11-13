@@ -81,6 +81,9 @@ yarn install
 
 > Use the `dev` versions only if required.
 
+> NOTE: the PR is published only if it carries the `dev` label: add it to the PR to get a `dev` release, otherwise the release is skipped.
+> Pull requests coming from forks always run in dry-run mode: nothing is published.
+
 ### 2. Push to `develop`
 
 - Impacted packages are published as: `x.y.z-rc.<timestamp>`
@@ -122,6 +125,7 @@ flowchart LR
 
 ## Important Rules
 
-- if an equivalent **stable** version already exists on npm: the release is skipped
+- if an equivalent **stable** version already exists on npm: the release fails — bump the `package.json#version` before releasing (this also blocks `dev` / `rc` releases of a stable version that was already published)
 - the `package.json` file in the repo must keep stable versions (`x.y.z`)
 - `-dev` / `-rc` suffixes are generated in CI
+- the npm publish authenticates with [GitHub Actions OIDC](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-oidc): no `NPM_TOKEN` secret is required (the `release.yml` workflow requests the `id-token: write` permission)
