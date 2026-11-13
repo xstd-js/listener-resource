@@ -339,6 +339,22 @@ describe('ListenerResource', () => {
     expect(thrown).toBe(sentinel);
   });
 
+  it('closes the resource when init throws', () => {
+    const sentinel: Error = new Error('init failed');
+    let emit!: EmitValue<number>;
+
+    expect((): void => {
+      new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
+        emit = emitFunction;
+        throw sentinel;
+      });
+    }).toThrowError(sentinel);
+
+    expect((): void => {
+      emit(1);
+    }).toThrowError('Resource closed');
+  });
+
   it('removes multiple listeners within the same cleanup cycle', async () => {
     let emit!: EmitValue<number>;
     const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
@@ -417,6 +433,48 @@ describe('ListenerResource', () => {
 
     emit(3);
     expect(received).toEqual([1, 1]);
+
+    await resource.close();
+  });
+
+  it('unregisters exactly one occurrence per aborted signal when the same listener is registered with different signals', async () => {
+    let emit!: EmitValue<number>;
+    const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
+      emit = emitFunction;
+    });
+
+    let deliveries: number = 0;
+    const listener: EmitValue<number> = (): void => {
+      deliveries++;
+    };
+
+    const controllerA: AbortController = new AbortController();
+    const controllerB: AbortController = new AbortController();
+    const controllerC: AbortController = new AbortController();
+
+    resource.listen(listener, { signal: controllerB.signal });
+    resource.listen(listener, { signal: controllerA.signal });
+    resource.listen(listener, { signal: controllerC.signal });
+
+    emit(1);
+    expect(deliveries).toBe(3);
+
+    controllerA.abort(); // aborts the second registration: the unregistration stays exact
+    emit(2);
+    expect(deliveries).toBe(5);
+
+    controllerB.abort();
+    emit(3);
+    expect(deliveries).toBe(6);
+
+    controllerC.abort();
+    emit(4);
+    expect(deliveries).toBe(6);
+
+    await setImmediateAsync();
+
+    emit(5);
+    expect(deliveries).toBe(6);
 
     await resource.close();
   });

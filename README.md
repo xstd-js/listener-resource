@@ -13,7 +13,7 @@
 
 ## @xstd/listener-resource
 
-A resource for event listener/emitter
+A broadcast hub resource for event listeners
 
 ## 📦 Installation
 
@@ -31,7 +31,7 @@ It extends the `Resource` class from [`@xstd/resource`](https://www.npmjs.com/pa
 
 ### 🏗️ Creating a `ListenerResource`
 
-The constructor takes an `init` function, called once, synchronously, with an `emit` function. Use `emit` to broadcast a value to all the registered listeners. The `init` function may return a teardown function, invoked with the close reason when the resource closes.
+The constructor takes an `init` function, called once, synchronously, with an `emit` function. Use `emit` to broadcast a value to all the registered listeners. The `init` function may return a teardown function, invoked with the close reason when the resource closes. If `init` throws, the resource is closed with the thrown error.
 
 ```ts
 import { ListenerResource } from '@xstd/listener-resource';

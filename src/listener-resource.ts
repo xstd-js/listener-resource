@@ -74,7 +74,7 @@ export class ListenerResource<GValue> extends Resource {
    * Creates a new `ListenerResource`.
    *
    * @param {InitListenerResource<GValue>} init - Called synchronously with the `emit` function. The returned `OnCloseResource`, if any, is registered as a teardown and invoked when the resource closes.
-   * @throws {unknown} The error thrown by `init`, if any.
+   * @throws {unknown} The error thrown by `init`, if any. The resource is closed with this error.
    */
   constructor(init: InitListenerResource<GValue>) {
     super((reason: unknown): Promise<void> => {
@@ -84,7 +84,13 @@ export class ListenerResource<GValue> extends Resource {
     this.#closeStack = new CloseStack(this);
     this.#listeners = [];
     this.#cleanupScheduled = false;
-    const onClose: OnCloseResource | void = init(this.#emit.bind(this));
+    let onClose: OnCloseResource | void;
+    try {
+      onClose = init(this.#emit.bind(this));
+    } catch (error: unknown) {
+      void this.close(error); // the resource is unusable: closed with the init error
+      throw error;
+    }
     if (onClose !== undefined) {
       this.#closeStack.addTeardown(onClose);
     }
@@ -145,6 +151,9 @@ export class ListenerResource<GValue> extends Resource {
     signal?.addEventListener(
       'abort',
       (): void => {
+        // One abort handler is registered per `listen` call, and registrations of the same listener
+        // are interchangeable (same reference): neutralizing the first live occurrence is therefore
+        // equivalent to unregistering the occurrence tied to this aborted signal.
         this.#listeners[this.#listeners.indexOf(listener)] = NOOP;
         this.#scheduleCleanup();
       },

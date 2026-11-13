@@ -1,9 +1,23 @@
 {
   "name": "@xstd/listener-resource",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "type": "module",
-  "description": "A resource for event listener/emitter",
-  "keywords": [],
+  "description": "A broadcast hub resource for event listeners",
+  "keywords": [
+    "event",
+    "event-emitter",
+    "event-listener",
+    "listener",
+    "emitter",
+    "broadcast",
+    "resource",
+    "abortable",
+    "signal",
+    "async-iterator",
+    "lifecycle",
+    "close",
+    "dispose"
+  ],
   "author": "Valentin Richard",
   "license": "MIT",
   "repository": {
