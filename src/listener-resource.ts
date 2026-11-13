@@ -43,7 +43,7 @@ export interface ListenerResourceToIteratorOptions
  * A broadcast hub: values emitted by the source are delivered synchronously, in registration order, to all the registered listeners.
  *
  * - Listeners are registered with `listen`, mirroring `EventTarget.addEventListener` semantics: they are unregistered when their provided `AbortSignal` aborts.
- * - The dispatch is fail-fast: when a listener throws, the remaining listeners are not invoked and the error is rethrown to the emitter.
+ * - The dispatch is fail-fast: when a listener throws, the resource is closed with the thrown error: the remaining listeners are not invoked, and the pending `next()`/`values()` consumers reject with it. The error is not rethrown to the emitter.
  * - Closing the resource clears all the registered listeners.
  * - Emitting a value after the resource is closed throws an error.
  *
@@ -112,7 +112,12 @@ export class ListenerResource<GValue> extends Resource {
     this.throwIfClosed();
 
     for (let i: number = 0; i < this.#listeners.length; i++) {
-      this.#listeners[i](value);
+      try {
+        this.#listeners[i](value);
+      } catch (error: unknown) {
+        void this.close(error); // critical error: closes the resource, clearing the listeners and interrupting this dispatch
+        break;
+      }
     }
   }
 
@@ -239,7 +244,7 @@ export class ListenerResource<GValue> extends Resource {
   /**
    * Enables `for await...of` iteration over this resource.
    *
-   * @returns {AsyncGenerator<GValue>} A new async generator, equivalent to `this.iterator()`.
+   * @returns {AsyncGenerator<GValue>} A new async generator, equivalent to `this.values()`.
    */
   [Symbol.asyncIterator](): AsyncGenerator<GValue> {
     return this.values();

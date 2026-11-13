@@ -51,7 +51,7 @@ Registers a listener invoked each time a value is emitted.
 - Mirrors `EventTarget.addEventListener` semantics: the listener is unregistered when the provided `signal` aborts.
 - Registering the same listener multiple times registers it multiple times.
 - Registering a listener with an already aborted `signal` does nothing.
-- The dispatch is fail-fast: when a listener throws, the remaining listeners are not invoked and the error is rethrown to the emitter.
+- The dispatch is fail-fast: when a listener throws, the resource is closed with the thrown error as close reason and the remaining listeners are not invoked.
 
 ```ts
 const controller: AbortController = new AbortController();
@@ -62,6 +62,29 @@ controller.abort(); // the listener is unregistered
 ```
 
 Throws if the resource is closed.
+
+### 💥 Error handling
+
+An error thrown by a listener is treated as a critical error interrupting the dispatch: the resource is closed with the thrown error as close reason.
+
+- the remaining listeners are not invoked;
+- pending `next` calls and `values` iterations reject with the error;
+- the error is observable through `closeSignal.reason`;
+- the error is never rethrown to the emitter: emitters (timers, event targets, ...) are not expected to handle listener failures.
+
+```ts
+resource.listen((value: number): void => {
+  if (value < 0) {
+    throw new Error('negative value'); // critical error: the resource closes with it
+  }
+});
+
+try {
+  await resource.next();
+} catch (error: unknown) {
+  console.error(error); // Error: negative value
+}
+```
 
 ### ⏭️ `next`
 
