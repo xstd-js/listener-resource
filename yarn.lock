@@ -1062,9 +1062,9 @@ __metadata:
     "@vitest/coverage-istanbul": "npm:^5.1.0"
     "@xstd/abortable": "npm:^1.2.3"
     "@xstd/none": "npm:^1.0.0"
-    "@xstd/queueing-policy": "npm:^1.0.1"
-    "@xstd/resource": "npm:^0.4.0"
-    fabrique: "npm:2.0.35"
+    "@xstd/queueing-policy": "npm:^1.1.0"
+    "@xstd/resource": "npm:^1.0.0"
+    fabrique: "npm:2.0.36"
     prettier: "npm:^3.10.1"
     prettier-plugin-organize-imports: "npm:^4.3.0"
     typedoc: "npm:^0.28.20"
@@ -1081,21 +1081,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xstd/queueing-policy@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@xstd/queueing-policy@npm:1.0.1"
+"@xstd/queueing-policy@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@xstd/queueing-policy@npm:1.1.0"
   dependencies:
     "@xstd/none": "npm:^1.0.0"
-  checksum: 10c0/d940a1c24a5c7c36d72dfcec582e7c199975e2604efeedf22446b7d0dfcb9fb8e48fa5c3a80f09570aa5fc401a087ab6af7b67bc14e111bccc23bc768eb0398c
+  checksum: 10c0/234a1e7ac85f497de7848cbee87c128abfb6bb60145bdbb172ae424d1a2d1f4e972d6c382345fb04bf1f45d3894257592be14656757b440b9190981f21cf7176
   languageName: node
   linkType: hard
 
-"@xstd/resource@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@xstd/resource@npm:0.4.0"
+"@xstd/resource@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@xstd/resource@npm:1.0.0"
   dependencies:
     "@xstd/abortable": "npm:^1.2.3"
-  checksum: 10c0/4f31804e49f726ad709e440de9a79ec4fd00e2a523e2a03de56070fe6bf9aecfe283f3a7c99d9adc31038d2f67e13d611b17c94e7a032c406fccc6fff4fd8097
+  checksum: 10c0/be7f658ccc7c69acc0754837c9d05e3a38f0ef98190a20be6bf6c2021958e07d4e57b559e025ad92cf5ddaffa5606887d7f5198c888b1e31125ddf7ed979cf8a
   languageName: node
   linkType: hard
 
@@ -1229,9 +1229,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fabrique@npm:2.0.35":
-  version: 2.0.35
-  resolution: "fabrique@npm:2.0.35"
+"fabrique@npm:2.0.36":
+  version: 2.0.36
+  resolution: "fabrique@npm:2.0.36"
   dependencies:
     "@inquirer/prompts": "npm:^8.8.0"
     chalk: "npm:^6.0.1"
@@ -1239,7 +1239,7 @@ __metadata:
     zod: "npm:^4.6.7"
   bin:
     fabrique: src/cli/cli.js
-  checksum: 10c0/dc473bb7caa805b4100a4d5e8b48ec2a06c42aef7e0d453dd7048cfe0190fc6b3ab51992c8cd5974aacf9d4115c3f1c85f62d5a283023cb191e0bad7b84f3c84
+  checksum: 10c0/2a2626ae257f1d5b9633d6d75c86b4aabeab10387f06bf1d13ab124dee40d177e5d5c389906240679d1de7abe310da5e654acce288b28f9c5ecdd46062d114ba
   languageName: node
   linkType: hard
 
