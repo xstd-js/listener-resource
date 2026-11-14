@@ -24,10 +24,11 @@ export interface EmitValue<GValue> {
  *
  * @template GValue - The type of the emitted values.
  * @param {EmitValue<GValue>} emit - A function to broadcast values to the registered listeners. Throws an error when the resource is closed.
+ * @param {AbortSignal} closeSignal - The resource's close signal. Not yet aborted at initialization time, and aborted with the close reason when the resource closes. Useful to cancel the underlying source (e.g. `addEventListener`'s or `AbortSignal.any`'s `signal` option).
  * @returns {OnCloseResource | void} An optional teardown function invoked with the close reason when the resource closes.
  */
 export interface InitListenerResource<GValue> {
-  (emit: EmitValue<GValue>): OnCloseResource | void;
+  (emit: EmitValue<GValue>, closeSignal: AbortSignal): OnCloseResource | void;
 }
 
 /**
@@ -73,7 +74,7 @@ export class ListenerResource<GValue> extends Resource {
   /**
    * Creates a new `ListenerResource`.
    *
-   * @param {InitListenerResource<GValue>} init - Called synchronously with the `emit` function. The returned `OnCloseResource`, if any, is registered as a teardown and invoked when the resource closes.
+   * @param {InitListenerResource<GValue>} init - Called synchronously with the `emit` function and the resource's `closeSignal`. The returned `OnCloseResource`, if any, is registered as a teardown and invoked when the resource closes.
    * @throws {unknown} The error thrown by `init`, if any. The resource is closed with this error.
    */
   constructor(init: InitListenerResource<GValue>) {
@@ -86,7 +87,7 @@ export class ListenerResource<GValue> extends Resource {
     this.#cleanupScheduled = false;
     let onClose: OnCloseResource | void;
     try {
-      onClose = init(this.#emit.bind(this));
+      onClose = init(this.#emit.bind(this), this.closeSignal);
     } catch (error: unknown) {
       void this.close(error); // the resource is unusable: closed with the init error
       throw error;
