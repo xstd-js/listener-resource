@@ -251,6 +251,24 @@ describe('ListenerResource', () => {
     expect(closedWithReason).toBe('because');
   });
 
+  it('provides the resource close signal to init', async () => {
+    let initSignal!: AbortSignal;
+
+    const resource = new ListenerResource<number>(
+      (_: EmitValue<number>, closeSignal: AbortSignal): void => {
+        initSignal = closeSignal;
+      },
+    );
+
+    expect(initSignal).toBe(resource.closeSignal); // stable identity: the same signal instance
+    expect(initSignal.aborted).toBe(false);
+
+    await resource.close('because');
+
+    expect(initSignal.aborted).toBe(true);
+    expect(initSignal.reason).toBe('because');
+  });
+
   it('removes the iterator listener when iteration ends early', async () => {
     let emit!: EmitValue<number>;
     const resource = new ListenerResource<number>((emitFunction: EmitValue<number>): void => {
